@@ -1,0 +1,35 @@
+name: Build and Push Helm Chart
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build-and-push:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up Helm
+        uses: aws/setup-helm@v1
+
+      - name: Build Helm chart
+        run: |
+          # Add commands to build your Helm chart
+          helm package nodejs-app
+
+      - name: Extract chart name and version
+        id: chart-info
+        run: |
+          chart=$(find . -name '*.tgz')
+          echo "::set-output name=chart-name::$(helm show chart $chart | awk '{print $1}')"
+          echo "::set-output name=chart-version::$(helm show chart $chart | awk '{print $2}')"
+
+      - name: Publish Helm chart
+        uses: helm/chart-releaser-action@v2
+        with:
+          chart_file: ${{ steps.chart-info.outputs.chart-name }}-${{ steps.chart-info.outputs.chart-version }}.tgz
+          token: ${{ secrets.GITHUB_TOKEN }}
+          chart_ref: https://github.com/kunal-154/helmChart-repo.git/nodejs-app
