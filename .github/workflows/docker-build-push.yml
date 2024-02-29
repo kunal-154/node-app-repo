@@ -19,8 +19,8 @@ jobs:
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
       - name: Build Docker image
-        run: docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/${{ github.repository }}:${{ github.sha }} .
-
+        run: docker build -t ${{ github.repository }}:latest .
+        
       - name: Tag Docker image
         run: docker tag ${{ secrets.DOCKERHUB_USERNAME }}/${{ github.repository }}:${{ github.sha }} ${{ secrets.DOCKERHUB_USERNAME }}/${{ github.repository }}:latest
 
