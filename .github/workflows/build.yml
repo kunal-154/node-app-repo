@@ -13,12 +13,11 @@ jobs:
         uses: actions/checkout@v2
 
       - name: Set up Helm
-        uses: aws/setup-helm@v1
+        uses: azure/setup-helm@latest
 
       - name: Build Helm chart
         run: |
-          # Add commands to build your Helm chart
-          helm package nodejs-app
+          helm package helm-charts
 
       - name: Extract chart name and version
         id: chart-info
