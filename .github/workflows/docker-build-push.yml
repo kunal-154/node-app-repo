@@ -26,7 +26,7 @@ jobs:
         run: docker build -t node-app-repo:${{ github.sha }} .
 
       - name: Tag Docker image
-        run: docker tag node-app-repo:${{ github.sha }} 442222453508.dkr.ecr.ap-south-1.amazonaws.com/node-app-repo:latest
-
+        run: docker tag node-app-repo:${{ github.sha }} 442222453508.dkr.ecr.ap-south-1.amazonaws.com/node-app-repo:${{ github.sha }}
+     
       - name: Push Docker image to ECR
-        run: docker push node-app-repo:${{ github.sha }} 
+        run: docker push 442222453508.dkr.ecr.ap-south-1.amazonaws.com/node-app-repo:${{ github.sha }}
