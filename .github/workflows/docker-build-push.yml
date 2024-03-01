@@ -30,4 +30,4 @@ jobs:
         run: docker tag ${{ github.repository }}:${{ github.sha }} ${{ steps.login-ecr.outputs.registry }}/${{ github.repository }}:${{ github.sha }}
 
       - name: Push Docker image to ECR
-        run: docker push ${{ steps.login-ecr.outputs.registry }}/${{ github.repository }}:${{ github.sha }}
+        run: docker push public.ecr.aws/v3f7n8i2/${{ github.repository }}:${{ github.sha }}
