@@ -40,3 +40,4 @@ jobs:
         run: |
           git clone https://github.com/kunal-154/helmchart-repo.git
           sed -i "s/tag: .*/tag: ${{ steps.ecr-get-latest-tag.outputs.latest_tag }}/" helmchart-repo/node-app/values.yaml
+          cat helmchart-repo/node-app/values.yaml
