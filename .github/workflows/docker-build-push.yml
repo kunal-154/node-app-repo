@@ -1,4 +1,4 @@
-name: Docker Build and Push
+name: Build and Push Docker image to ECR
 
 on:
   push:
@@ -12,20 +12,22 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
-      - name: Login to Docker Hub 
-        uses: docker/login-action@v1
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v2
         with:
-          username: ${{ secrets.DOCKERHUB_USERNAME }}
-          password: ${{ secrets.DOCKERHUB_TOKEN }}
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ap-south-1
+
+      - name: Login to ECR 
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v1
 
       - name: Build Docker image
-        run: docker build -t ${{ github.repository }}:latest .
-        
-      - name: Push Docker image to Docker Hub
-        run: |
-          docker push ${DOCKERHUB_USERNAME}/${GITHUB_REPOSITORY}:${GITHUB_SHA} && \
-          docker push ${DOCKERHUB_USERNAME}/${GITHUB_REPOSITORY}:latest
-        env:
-          DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
-          GITHUB_REPOSITORY: ${{ github.repository }}
-          GITHUB_SHA: ${{ github.sha }}
+        run: docker build -t ${{ github.repository }}:${{ github.sha }} .
+
+      - name: Tag Docker image
+        run: docker tag ${{ github.repository }}:${{ github.sha }} ${{ steps.login-ecr.outputs.registry }}/${{ github.repository }}:${{ github.sha }}
+
+      - name: Push Docker image to ECR
+        run: docker push ${{ steps.login-ecr.outputs.registry }}/${{ github.repository }}:${{ github.sha }}
