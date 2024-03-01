@@ -29,4 +29,4 @@ jobs:
         run: aws ecr put-image-tag-mutability --repository-name node-app-repo --image-tag-mutability IMMUTABLE --region ap-south-1
 
       - name: Push Docker image to ECR
-        run: docker push 442222453508.dkr.ecr.ap-south-1.amazonaws.com/node-app-repo:latest
+        run: aws ecr put-image-tag-mutability --registry-id <aws-account-id> --repository-name <repository-name> --image-tag-mutability <MUTABLE | IMMUTABLE>
