@@ -30,3 +30,12 @@ jobs:
      
       - name: Push Docker image to ECR
         run: docker push 442222453508.dkr.ecr.ap-south-1.amazonaws.com/node-app-repo:${{ github.sha }}
+
+      - name: Get latest ECR image tag
+        id: ecr-get-latest-tag
+        run: |
+          echo "::set-output name=latest_tag::$(aws ecr describe-images --repository-name node-app-repo --query 'sort_by(imageDetails,& imagePushedAt)[-1].imageTags[0]' --output text)"
+
+      - name: Update values.yml file
+        run: |
+          sed -i "s/tag: .*/tag: ${{ steps.ecr-get-latest-tag.outputs.latest_tag }}/" helmchart-repo/values.yaml
