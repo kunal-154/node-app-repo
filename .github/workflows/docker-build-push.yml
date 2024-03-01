@@ -38,4 +38,4 @@ jobs:
 
       - name: Update values.yml file
         run: |
-          sed -i "s/tag: .*/tag: ${{ steps.ecr-get-latest-tag.outputs.latest_tag }}/" helmchart-repo/values.yaml
+          sed -i "s/tag: .*/tag: ${{ steps.ecr-get-latest-tag.outputs.latest_tag }}/" helmchart-repo/node-app/values.yaml
