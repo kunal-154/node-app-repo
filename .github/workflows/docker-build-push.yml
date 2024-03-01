@@ -24,10 +24,10 @@ jobs:
         uses: aws-actions/amazon-ecr-login@v1
 
       - name: Build Docker image
-        run: docker build -t ${{ github.repository }}:${{ github.sha }} .
+        run: docker build -t node-app-repo:${{ github.sha }} .
 
       - name: Tag Docker image
-        run: docker tag ${{ github.repository }}:${{ github.sha }} ${{ steps.login-ecr.outputs.registry }}/${{ github.repository }}:${{ github.sha }}
+        run: docker tag node-app-repo:latest public.ecr.aws/v3f7n8i2/node-app-repo:${{ github.sha }}
 
       - name: Push Docker image to ECR
-        run: docker push public.ecr.aws/v3f7n8i2/${{ github.repository }}:${{ github.sha }}
+        run: docker push public.ecr.aws/v3f7n8i2/node-app-repo:${{ github.sha }}
