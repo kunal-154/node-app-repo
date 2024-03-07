@@ -38,16 +38,16 @@ jobs:
 
       - name: Update values.yml file
         run: |
-          git clone https://github.com/kunal-154/helmchart-repo.git
-          sed -i "s/tag: .*/tag: ${{ steps.ecr-get-latest-tag.outputs.latest_tag }}/" helmchart-repo/node-app/values.yaml
+          git clone https://github.com/kunal-154/helmchart.git
+          sed -i "s/tag: .*/tag: ${{ steps.ecr-get-latest-tag.outputs.latest_tag }}/" helmchart/values.yaml
 
       - name: Pushes to another repository
         uses: cpina/github-action-push-to-another-repository@main
         env:
            API_TOKEN_GITHUB: ${{ secrets.API_TOKEN_GITHUB }}
         with:
-           source-directory: 'helmchart-repo'
+           source-directory: 'helmchart'
            destination-github-username: 'kunal-154'
-           destination-repository-name: 'helmchart-repo'
+           destination-repository-name: 'helmchart'
            user-email: kunalgupta154@gmail.com
            target-branch: main
